@@ -140,10 +140,22 @@ export const DELETE = async (request) => {
   let role = null;
 
   //if role is "ADMIN", send the following response
-  const payload = jwt.verify(token, process.env.JWT_SECRET);
-  studentId = payload.studentId;
-  role = payload.role;
-  
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    studentId = payload.studentId;
+    role = payload.role;
+    //read role information from "payload" here (just one line code!)
+    //role = ...
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Invalid token",
+      },
+      { status: 401 }
+    );
+  }
+
   if (role === "ADMIN")
     return NextResponse.json(
       {
